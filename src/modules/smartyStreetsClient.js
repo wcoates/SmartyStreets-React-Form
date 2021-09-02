@@ -1,4 +1,7 @@
-export { getFuzzyAddressMatch, getPreciseAddressMatch}
+export {
+  getFuzzyAddressMatch,
+  getPreciseAddressMatch
+}
 
 const SmartyStreetsSDK = require("smartystreets-javascript-sdk");
 const SmartyStreetsCore = SmartyStreetsSDK.core;
@@ -22,14 +25,14 @@ function defaultLookup(addressInput) {
 }
 
 function getAddressMatchResults(lookup) {
-  client.send(lookup)
-    .then(function(results) {
-      addressMatchResults = results.result;
-      logSuggestions(results, "Simple Lookup")
-    })
-    .catch(console.log);
+  client.send(lookup).then(function(results) {
+    addressMatchResults = results.result;
+    logSuggestions(results, "Simple Lookup")
+  }).catch(console.log);
 
-  return addressMatchResults;
+  return addressMatchResults
+    ? addressMatchResults
+    : [];
 }
 
 function logSuggestions(response, message) {

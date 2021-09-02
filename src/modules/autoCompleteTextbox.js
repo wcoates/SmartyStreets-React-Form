@@ -1,72 +1,61 @@
-import React, {
-	useState
-} from 'react';
+import React, {useState} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import {
-	getFuzzyAddressMatch,
-	getPreciseAddressMatch
-} from './smartyStreetsClient.js';
+import {getFuzzyAddressMatch, getPreciseAddressMatch} from './smartyStreetsClient.js';
 
 export default function AutocompleteTextbox() {
-	const [options, setOptions] = React.useState([]);
+  const [options, setOptions] = React.useState([]);
+  const emptyState = [];
 
-	const onChangeHandle = async value => {
-		const addressMatchResults = getFuzzyAddressMatch(value);
+  const onChangeHandle = async value => {
+    if (value) {
+      const addressMatchResults = getFuzzyAddressMatch(value);
 
-		if (addressMatchResults != null) {
-			setOptions(addressMatchResults.map(options => options));
-		}
-	};
+      if (addressMatchResults) {
+        const optionLabelNames = addressMatchResults.map(options => getOptionLabelName(options));
+        setOptions(optionLabelNames.map(options => options));
+      }
+    }
+  }
 
-	return ( <
-		Autocomplete id = "asynchronous-demo"
-		style = {
-			{
-				width: 300
-			}
-		}
-		getOptionSelected = {
-			(option, value) => option.secondary === "Apt"
-		}
-		getOptionLabel = {
-			option => getLabelforSuggestion(option)
-		}
-		options = {
-			options
-		}
+  return (< Autocomplete id = "freesolo" style = {
+    {
+      width: 300
+    }
+  }
+  getOptionLabel = {
+    option => option
+  }
+  options = {
+    options
+  }
 
-		renderInput = {
-			params => ( <
-				TextField {
-					...params
-				}
-				label = "Street Address"
-				variant = "outlined"
-				onChange = {
-					ev => {
-						// dont fire API if the user delete or not entered anything
-						if (ev.target.value !== "" || ev.target.value !== null) {
-							onChangeHandle(ev.target.value);
-						}
-
-						// TODO: if the field is cleared clear the list
-					}
-				}
-				InputProps = {
-					{
-						...params.InputProps
-					}
-				}
-				/>
-			)
-		}
-		/>
-	);
+  renderInput = {
+    params => (< TextField {
+      ...params
+    }
+    label = "Street Address" variant = "outlined" onChange = {
+      ev => {
+        // dont fire API if the user delete or not entered anything
+        if (ev.target.value) {
+          onChangeHandle(ev.target.value);
+        } else {
+          setOptions(emptyState);
+        }
+      }
+    }
+    InputProps = {
+      {
+        ...params.InputProps
+      }
+    } />)
+  } />);
 }
 
-function getLabelforSuggestion(suggestion) {
-  const label = suggestion.streetLine + " " + suggestion.secondary + " " + suggestion.city + ", " + suggestion.state + " " + suggestion.zipcode
+function getOptionLabelName(suggestion) {
+  if (!suggestion.secondary && suggestion.entries === 0) {
+    return suggestion.streetLine + " " + suggestion.city + ", " + suggestion.state + " " + suggestion.zipcode;
+  }
 
-  return label + suggestion.entries > 1 ? " (" + suggestion.entries + " additional results)" : "";
+  return suggestion.streetLine + " " + suggestion.secondary + " " + suggestion.city + ", " + suggestion.state + " " + suggestion.zipcode + " (" + suggestion.entries + " additional results)";
 }

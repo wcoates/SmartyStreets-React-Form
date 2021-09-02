@@ -13,7 +13,6 @@ In the project directory, you can run:
 ## Todos
 - Create additional text boxes for remaining address components
 - Support for multiple entries (ex. selecting an apartment #) (see getPreciseAddressMatch())
-- Expose styling of components
 - Confirm label population performance (suggestions returned but labels not immediately updated)
 - Expose components of selected address
 - Support initial address injection

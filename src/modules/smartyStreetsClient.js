@@ -7,7 +7,7 @@ const CLIENT_MAX_RESULTS = 5;
 const CLIENT_PREFER_STATES = ["MO"];
 
 // https://github.com/smartystreets/smartystreets-javascript-sdk/blob/master/examples/us_autocomplete_pro.js
-const key = "21102174564513388";
+const key = "";
 const credentials = new SmartyStreetsCore.SharedCredentials(key);
 const clientBuilder = new SmartyStreetsCore.ClientBuilder(credentials).withLicenses(["us-autocomplete-pro-cloud"]);
 const client = clientBuilder.buildUsAutocompleteProClient();
@@ -45,3 +45,4 @@ function getFuzzyAddressMatch(addressInput) {
 function getPreciseAddressMatch(addressInput) {
   return getAddressMatchResults(defaultLookup(addressInput).selected);
 }
+
